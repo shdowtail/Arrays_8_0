@@ -1,0 +1,61 @@
+Dividing the array size by the element size gives the length of the array:
+sizeof(a) / sizeof (a[0])
+
+To clear an array a, we could write:
+for(i = 0; i < sizeof(a) / sizeof(a[0]); i++)
+    a[i] = 0;
+
+    The variable i probably has type int (a signed type), whereas sizeof produces a value of type size_t (an
+    unsigned type).
+    We know from Section 7.4 that comparing a signed integer with an
+    unsigned integer is a dangerous practice.
+
+    To avoid a warning, we can add a cast that converts sizeof(a) / sizeof(a[0]) to signed integer:
+
+    for (i = 0; i < (int) (sizeof(a) / sizeof(a[0])); i++)
+        a[i] = 0;
+
+    adding a cast is often a bit unwieldy; defining a macro that represents it, is often helpful:
+
+    #define SIZE ((int) (sizeof(a) / sizeof(a[10])))
+
+    for (i = 0; i < SIZE; i++)
+        a[i] = 0;
+
+
+***********************************************************************************************************************
+RANDOM CARD DRAW
+
+To pick cards randomly we'll use several funtions:
+'time' func from <time.h> - returns current time, encoded in a single number.
+'srand' func from <stdlib.h> initializes C's random number generator.
+
+Passing the return value of 'time' to 'srand' prevents the program from dealing the same cards every time we run it.
+
+The 'rand' function from <stdlib.h> produces an apparently random number each time it's called.
+By using the % operator, we can scale the return value of rand so that it falls between 0 and 3 (for suits) or between
+or between 0 and 12 (for ranks)
+
+To avoid picking the same card twice, we'll need to keep track of which cards have already been chosen.
+For that purpose, we'll use an array named in_hand that has only four rows (one for each suit)
+and 13 columns (one for each rank).
+Each element of the array corresponds to one of 52 cards in the deck.
+All elements of the array will be false to start with. Each time we pick a card at random, we'll check whether
+the element of in_hand corresponding to that card is true or false. If it's true we'll have to pick another card
+if false, we'll store 'true' in that card's array element to remind us later that this card has already been picked.
+Once we've verified that a card is "new" we'll need to translate it's numerical rank and suit to character form.
+We'll set up two arrays of characters - one for the 'rank' and one for the 'suit'
+These arrays won't change during program execution, so we declare them as 'const'.
+
+**********************************************************************************************************************
+COPYING ARRAY INTO ARRAY
+
+Another possibility is to use the memcpy (“memory copy”) function from the
+<string.h> header. memcpy is a low-level function that simply copies bytes
+from one place to another. To copy the array b into the array a, use memcpy as
+follows:Exercises
+memcpy (a,b, sizeof(a));
+Many programmers prefer memcpy, especially for large arrays, because it’s poten-
+tially faster than an ordinary loop.
+
+
